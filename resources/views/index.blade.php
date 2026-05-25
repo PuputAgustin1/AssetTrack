@@ -794,12 +794,25 @@ tbody tr:hover td {
     }
     .pagination-wrap {
     padding: 12px;
-    }
+}
 
-    .pagination-wrap nav {
-        justify-content: flex-start;
-        min-width: max-content;
+.pagination-wrap nav {
+    justify-content: flex-start;
+    min-width: max-content;
+}
+.qr-box svg {
+    width: 70px;
+    height: 70px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .qr-box svg {
+        width: 95px;
+        height: 95px;
     }
+}
+
 }
 </style>
 
@@ -1064,7 +1077,7 @@ tbody tr:hover td {
 
                                     <td style="text-align:center">
                                         <div class="qr-box" id="qr-{{ $asset->code }}">
-                                            {!! QrCode::size(52)->generate(route('assets.show', $asset->code)) !!}
+                                            {!! QrCode::size(180)->margin(2)->generate(route('assets.show', $asset->code)) !!}
                                         </div>
 
                                         <button type="button"
@@ -1188,15 +1201,15 @@ function downloadQR(code) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    canvas.width = 300;
-    canvas.height = 300;
+    canvas.width = 800;
+    canvas.height = 800;
 
     const img = new Image();
 
     img.onload = function () {
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 30, 30, 240, 240);
+        ctx.drawImage(img, 80, 80, 640, 640);
 
         const link = document.createElement('a');
         link.download = code + '-qrcode.png';

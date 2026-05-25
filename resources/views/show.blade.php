@@ -681,6 +681,13 @@ body {
         max-height: 145px;
     }
 
+    #print-area svg {
+    width: 220px;
+    height: 220px;
+    display: block;
+    margin: 0 auto;
+    }
+
     .mobile-nav {
         display: flex;
         position: fixed;
@@ -703,6 +710,21 @@ body {
 
     .mobile-nav a.active {
         color: var(--accent);
+    }
+    .qr-detail svg,
+    #print-area svg {
+        width: 220px;
+        height: 220px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+        .qr-detail svg,
+        #print-area svg {
+            width: 260px;
+            height: 260px;
+        }
     }
 }
 </style>
@@ -928,7 +950,7 @@ body {
 
                     <div class="qr-body">
                         <div class="qr-frame print-area" id="print-area">
-                            {!! QrCode::size(160)->generate(route('assets.show', $asset->code)) !!}
+                            {!! QrCode::size(320)->margin(2)->generate(route('assets.show', $asset->code)) !!}
                         </div>
 
                         <div class="qr-name">{{ $asset->name }}</div>
