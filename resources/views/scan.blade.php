@@ -1149,16 +1149,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         scannerInstance = new Html5QrcodeScanner("reader", {
             fps: 10,
-            qrbox: qrboxSize,
-            rememberLastUsedCamera: true,
-            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+            qrbox: {
+                width: qrboxSize,
+                height: qrboxSize
+            },
+            rememberLastUsedCamera: false,
+            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+
+            // Paksa pakai kamera belakang HP
+            videoConstraints: {
+                facingMode: { ideal: "environment" }
+            }
         });
 
         scannerInstance.render(function(decodedText) {
             handleDecodedQR(decodedText);
         });
 
-        updateScanStatus('Kamera aktif — arahkan ke QR Code');
+        updateScanStatus('Kamera aktif — arahkan kamera belakang ke QR Code');
     }
 });
 
