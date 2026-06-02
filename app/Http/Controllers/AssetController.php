@@ -69,6 +69,11 @@ class AssetController extends Controller
         'penanggungjawab' => 'required',
         'tanggal_masuk' => 'required',
         'harga' => 'required',
+        'warna' => 'nullable|string|max:255',
+        'ukuran' => 'nullable|string|max:255',
+        'satuan' => 'nullable|string|max:50',
+        'stok_awal' => 'nullable|integer|min:0',
+                
 
     ], [
         'code.unique' => 'Kode aset sudah digunakan',
@@ -84,6 +89,11 @@ class AssetController extends Controller
         'penanggungjawab' => $request->penanggungjawab,
         'tanggal_masuk' => $request->tanggal_masuk,
         'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
+        'warna' => $request->warna,
+        'ukuran' => $request->ukuran,
+        'satuan' => $request->satuan ?? 'pcs',
+        'stok_awal' => $request->stok_awal ?? 0,
+        'stok_saat_ini' => $request->stok_awal ?? 0,
 
     ]);
 
@@ -118,6 +128,11 @@ class AssetController extends Controller
         'penanggungjawab' => 'required',
         'tanggal_masuk' => 'required',
         'harga' => 'required',
+        'warna' => 'nullable|string|max:255',
+        'ukuran' => 'nullable|string|max:255',
+        'satuan' => 'nullable|string|max:50',
+        'stok_awal' => 'nullable|integer|min:0',
+        'stok_saat_ini' => 'nullable|integer|min:0',
     ]);
 
     $asset->update([
@@ -130,6 +145,11 @@ class AssetController extends Controller
         'penanggungjawab' => $request->penanggungjawab,
         'tanggal_masuk' => $request->tanggal_masuk,
         'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
+        'warna' => $request->warna,
+        'ukuran' => $request->ukuran,
+        'satuan' => $request->satuan ?? 'pcs',
+        'stok_awal' => $request->stok_awal ?? 0,
+        'stok_saat_ini' => $request->stok_saat_ini ?? 0,
     ]);
 
     return redirect('/assets')->with('success', 'Data berhasil diupdate');

@@ -771,6 +771,31 @@ input.is-invalid {
                                 <span class="form-hint">Masukkan angka tanpa titik atau koma</span>
                             </div>
 
+                            <div class="form-group">
+                                <label for="warna">Warna</label>
+                                <input type="text" name="warna" id="warna" value="{{ old('warna') }}" placeholder="Contoh: Hitam">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ukuran">Ukuran</label>
+                                <input type="text" name="ukuran" id="ukuran" value="{{ old('ukuran') }}" placeholder="Contoh: M / L / XL">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="satuan">Satuan</label>
+                                <input type="text" name="satuan" id="satuan" value="{{ old('satuan', 'pcs') }}" placeholder="Contoh: pcs">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stok_awal">Stok Awal</label>
+                                <input type="number" name="stok_awal" id="stok_awal" value="{{ old('stok_awal', 0) }}" min="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="stok_saat_ini">Stok Saat Ini</label>
+                                <input type="number" name="stok_saat_ini" id="stok_saat_ini" value="{{ old('stok_saat_ini', 0) }}" min="0">
+                            </div>
+
                         </div>
                     </div>
 

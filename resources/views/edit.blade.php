@@ -1238,6 +1238,31 @@ select.ctrl {
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="warna">Warna</label>
+                                    <input type="text" name="warna" id="warna" value="{{ old('warna', $asset->warna) }}" placeholder="Contoh: Hitam">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ukuran">Ukuran</label>
+                                    <input type="text" name="ukuran" id="ukuran" value="{{ old('ukuran', $asset->ukuran) }}" placeholder="Contoh: M / L / XL">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="satuan">Satuan</label>
+                                    <input type="text" name="satuan" id="satuan" value="{{ old('satuan', $asset->satuan ?? 'pcs') }}" placeholder="Contoh: pcs">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="stok_awal">Stok Awal</label>
+                                    <input type="number" name="stok_awal" id="stok_awal" value="{{ old('stok_awal', $asset->stok_awal) }}" min="0">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="stok_saat_ini">Stok Saat Ini</label>
+                                    <input type="number" name="stok_saat_ini" id="stok_saat_ini" value="{{ old('stok_saat_ini', $asset->stok_saat_ini) }}" min="0">
+                                </div>
+
                             </div>
                         </div>
                     </div>
