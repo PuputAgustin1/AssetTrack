@@ -967,6 +967,12 @@ body {
                                 Hapus Aset
                             </button>
                         </form>
+
+                        <a href="{{ route('transactions.create', $asset->code) }}"
+                            style="display:inline-block; padding:10px 16px; background:#111827; color:white; border-radius:10px; text-decoration:none;">
+                                Transaksi IN/OUT
+                        </a>
+
                     </div>
                 </div>
 

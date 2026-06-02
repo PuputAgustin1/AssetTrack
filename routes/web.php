@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\AssetTransactionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +20,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/assets/check-code/{code}', [AssetController::class, 'checkCode'])
         ->name('assets.checkCode');
+
+    Route::get('/assets/{code}/transaction', [AssetTransactionController::class, 'create'])
+    ->name('transactions.create');
+
+    Route::post('/assets/{code}/transaction', [AssetTransactionController::class, 'store'])
+        ->name('transactions.store');
+
+    Route::get('/transactions/history', [AssetTransactionController::class, 'history'])
+        ->name('transactions.history');
 
     Route::resource('assets', AssetController::class);
 
