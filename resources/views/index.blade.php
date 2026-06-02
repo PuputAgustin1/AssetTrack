@@ -674,6 +674,8 @@ tbody tr:hover td {
     background: #e5e7eb;
 }
 
+
+
 /* MOBILE NAV */
 .mobile-nav {
     display: none;
@@ -1033,6 +1035,9 @@ tbody tr:hover td {
                                 <th>Kategori</th>
                                 <th>Lokasi</th>
                                 <th>Merk</th>
+                                <th>Warna</th>
+                                <th>Ukuran</th>
+                                <th>Stok</th>
                                 <th>Penanggung Jawab</th>
                                 <th>Tgl Masuk</th>
                                 <th>Harga</th>
@@ -1050,6 +1055,13 @@ tbody tr:hover td {
                                     <td><span class="cat-badge">{{ $asset->category }}</span></td>
                                     <td style="color:var(--muted); font-size:12px">{{ $asset->location }}</td>
                                     <td style="font-size:12px">{{ $asset->merk }}</td>
+                                    <td>{{ $asset->warna ?? '-' }}</td>
+                                    <td>{{ $asset->ukuran ?? '-' }}</td>
+                                    <<td>
+                                        <span class="stock-badge {{ ($asset->stok_saat_ini ?? 0) <= 0 ? 'empty' : '' }}">
+                                            {{ $asset->stok_saat_ini ?? 0 }} {{ $asset->satuan ?? 'pcs' }}
+                                        </span>
+                                    </td>
                                     <td style="font-size:12px; color:var(--muted)">{{ $asset->penanggungjawab }}</td>
                                     <td style="font-size:12px; color:var(--muted); white-space:nowrap">{{ $asset->tanggal_masuk }}</td>
                                     

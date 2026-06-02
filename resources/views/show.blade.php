@@ -916,6 +916,32 @@ body {
                                     Rp {{ is_numeric($asset->harga) ? number_format($asset->harga, 0, ',', '.') : $asset->harga }}
                                 </div>
                             </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Warna</div>
+                                <div class="info-value">{{ $asset->warna ?? '-' }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">ukuran</div>
+                                <div class="info-value">{{ $asset->ukuran ?? '-' }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Satuan</div>
+                                <div class="info-value">{{ $asset->satuan ?? 'pcs' }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Stok Awal</div>
+                                <div class="info-value">{{ $asset->stok_awal ?? 0 }} {{ $asset->satuan ?? 'pcs' }}</div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-label">Stok Saat Ini</div>
+                                <div class="info-value">{{ $asset->stok_saat_ini ?? 0 }} {{ $asset->satuan ?? 'pcs' }}</div>
+                            </div>
+
                         </div>
                     </div>
 
