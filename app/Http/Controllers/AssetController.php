@@ -167,18 +167,34 @@ class AssetController extends Controller
 
     public function checkCode($code)
     {
+        $code = trim(urldecode($code));
+
+        if (filter_var($code, FILTER_VALIDATE_URL)) {
+            $path = parse_url($code, PHP_URL_PATH);
+            $parts = array_values(array_filter(explode('/', $path)));
+            $code = end($parts);
+        }
+
         $asset = Asset::where('code', $code)->first();
 
         if (!$asset) {
             return response()->json([
                 'exists' => false,
-                'message' => 'Kode aset tidak ditemukan.',
+                'message' => 'Kode barang tidak ditemukan: ' . $code,
             ], 404);
         }
 
         return response()->json([
             'exists' => true,
-            'url' => route('assets.show', $asset->code),
+            'asset' => [
+                'code' => $asset->code,
+                'name' => $asset->name,
+                'merk' => $asset->merk,
+                'warna' => $asset->warna,
+                'ukuran' => $asset->ukuran,
+                'satuan' => $asset->satuan ?? 'pcs',
+                'stok_saat_ini' => $asset->stok_saat_ini ?? 0,
+            ],
         ]);
     }
 

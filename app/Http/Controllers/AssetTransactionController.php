@@ -57,6 +57,52 @@ class AssetTransactionController extends Controller
             ->with('success', 'Transaksi berhasil disimpan dan stok telah diperbarui.');
     }
 
+    public function batchStore(Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:IN,OUT',
+            'note' => 'nullable|string|max:1000',
+            'items' => 'required|array|min:1',
+            'items.*.code' => 'required|string|exists:assets,code',
+            'items.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['items'] as $item) {
+                $asset = Asset::where('code', $item['code'])->lockForUpdate()->firstOrFail();
+                $quantity = (int) $item['quantity'];
+
+                if ($validated['type'] === 'OUT' && $asset->stok_saat_ini < $quantity) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'items' => 'Stok barang ' . $asset->code . ' tidak mencukupi.',
+                    ]);
+                }
+
+                AssetTransaction::create([
+                    'asset_code' => $asset->code,
+                    'user_id' => Auth::id(),
+                    'type' => $validated['type'],
+                    'quantity' => $quantity,
+                    'note' => $validated['note'] ?? null,
+                    'transaction_date' => now(),
+                ]);
+
+                if ($validated['type'] === 'IN') {
+                    $asset->stok_saat_ini += $quantity;
+                } else {
+                    $asset->stok_saat_ini -= $quantity;
+                }
+
+                $asset->save();
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua transaksi berhasil disimpan.',
+        ]);
+    }
+
     public function history()
     {
         $transactions = AssetTransaction::with(['asset', 'user'])

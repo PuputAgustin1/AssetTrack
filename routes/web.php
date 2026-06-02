@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/assets/{code}/transaction', [AssetTransactionController::class, 'store'])
         ->name('transactions.store');
 
+    Route::post('/transactions/batch-store', [AssetTransactionController::class, 'batchStore'])
+    ->name('transactions.batchStore');
+
     Route::get('/transactions/history', [AssetTransactionController::class, 'history'])
         ->name('transactions.history');
 
