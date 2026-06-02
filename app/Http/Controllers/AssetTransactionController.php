@@ -111,4 +111,22 @@ class AssetTransactionController extends Controller
 
         return view('transactions.history', compact('transactions'));
     }
+
+    public function stockRecap()
+    {
+        $assets = Asset::withSum([
+                'transactions as total_in' => function ($query) {
+                    $query->where('type', 'IN');
+                }
+            ], 'quantity')
+            ->withSum([
+                'transactions as total_out' => function ($query) {
+                    $query->where('type', 'OUT');
+                }
+            ], 'quantity')
+            ->orderBy('name')
+            ->paginate(15);
+
+        return view('transactions.recap', compact('assets'));
+    }
 }

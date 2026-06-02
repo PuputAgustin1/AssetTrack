@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/history', [AssetTransactionController::class, 'history'])
         ->name('transactions.history');
 
+    Route::get('/transactions/recap', [AssetTransactionController::class, 'stockRecap'])
+    ->name('transactions.stockRecap');
+
     Route::resource('assets', AssetController::class);
 
     Route::get('/scan', function () {
