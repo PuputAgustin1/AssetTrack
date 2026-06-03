@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AssetTransaction extends Model
 {
     protected $fillable = [
+        'batch_id',
         'asset_code',
         'user_id',
         'type',
@@ -27,5 +28,10 @@ class AssetTransaction extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(ScanBatch::class, 'batch_id');
     }
 }

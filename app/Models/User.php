@@ -29,4 +29,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function scanBatches()
+    {
+        return $this->hasMany(ScanBatch::class);
+    }
+
+    public function assetTransactions()
+    {
+        return $this->hasMany(AssetTransaction::class);
+    }
 }
