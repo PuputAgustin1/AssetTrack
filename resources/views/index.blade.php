@@ -817,6 +817,83 @@ tbody tr:hover td {
     }
 
 }
+
+/* FIX PAGINATION LARAVEL */
+.pagination-wrap {
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+}
+
+.pagination-wrap nav[role="navigation"] {
+    width: 100%;
+}
+
+.pagination-wrap nav[role="navigation"] > div:first-child {
+    display: none;
+}
+
+.pagination-wrap nav[role="navigation"] > div:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    width: 100%;
+}
+
+.pagination-wrap nav[role="navigation"] p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.pagination-wrap nav[role="navigation"] a,
+.pagination-wrap nav[role="navigation"] span {
+    font-size: 13px !important;
+    line-height: 1 !important;
+}
+
+.pagination-wrap nav[role="navigation"] a[rel="prev"],
+.pagination-wrap nav[role="navigation"] a[rel="next"],
+.pagination-wrap nav[role="navigation"] span[aria-disabled="true"] {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+.pagination-wrap nav[role="navigation"] svg,
+.pagination-wrap nav[role="navigation"] a svg,
+.pagination-wrap nav[role="navigation"] span svg,
+.pagination-wrap svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    display: block !important;
+}
+
+.pagination-wrap .relative.inline-flex,
+.pagination-wrap a.relative.inline-flex,
+.pagination-wrap span.relative.inline-flex {
+    min-width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+}
+
+@media(max-width:768px) {
+    .pagination-wrap nav[role="navigation"] > div:last-child {
+        justify-content: flex-start;
+        min-width: max-content;
+    }
+}
 </style>
 
 <div class="layout">
@@ -918,41 +995,33 @@ tbody tr:hover td {
                 <p>Kelola seluruh aset perusahaan</p>
             </div>
 
-            <div class="topbar">
+            <div class="topbar-right">
+                <div class="profile-dropdown">
+                    <button type="button" class="profile-btn" onclick="toggleProfileMenu()">
+                        <div class="avatar">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
 
-            <div class="profile-dropdown">
+                        <div class="profile-info">
+                            <span>{{ Auth::user()->name }}</span>
+                        </div>
+                    </button>
 
-                <button class="profile-btn" onclick="toggleProfileMenu()">
+                    <div class="dropdown-menu" id="profileMenu">
+                        <a href="{{ route('profile.edit') }}">
+                            Edit Profile
+                        </a>
 
-                    <div class="avatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <button type="submit">
+                                Logout
+                            </button>
+                        </form>
                     </div>
-
-                    <div class="profile-info">
-                        <span>{{ Auth::user()->name }}</span>
-                    </div>
-
-                </button>
-
-                <div class="dropdown-menu" id="profileMenu">
-
-                    <a href="{{ route('profile.edit') }}">
-                        Edit Profile
-                    </a>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-
-                        <button type="submit">
-                            Logout
-                        </button>
-                    </form>
-
                 </div>
-
             </div>
-
-        </div>
         </div>
 
         <div class="content">
@@ -1166,7 +1235,7 @@ tbody tr:hover td {
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="11" style="text-align:center; color:var(--muted); padding:48px 16px">
+                                    <td colspan="14" style="text-align:center; color:var(--muted); padding:48px 16px">
                                         Data aset tidak ditemukan.
                                     </td>
                                 </tr>
