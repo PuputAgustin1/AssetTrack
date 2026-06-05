@@ -1072,7 +1072,7 @@ body {
 
                 <div class="page-head">
                     <h2>Import Data Barang</h2>
-                    <p>Upload file Excel (.xlsx / .xls / .csv) untuk menambahkan data aset secara massal.</p>
+                    <p>Upload file Excel (.xlsx / .xls / .csv) untuk menambahkan data barang secara massal. Kode barang akan dibuat otomatis oleh sistem.</p>
                 </div>
 
                 {{-- ALERTS --}}
@@ -1219,17 +1219,19 @@ body {
                                 <div class="col-list">
                                     @php
                                         $cols = [
-                                            ['A','Kode Barang',true],
-                                            ['B','Nama Aset',true],
-                                            ['C','Kategori',true],
-                                            ['D','Lokasi',true],
-                                            ['E','Kondisi',true],
-                                            ['F','Buyer',false],
+                                            ['A','Nama Barang',true],
+                                            ['B','Kategori',true],
+                                            ['C','Lokasi',true],
+                                            ['D','Kondisi',true],
+                                            ['E','Buyer',false],
                                             ['F','Style',false],
-                                            ['F','Grade',false],
-                                            ['G','Penanggung Jawab',false],
-                                            ['H','Tanggal Masuk',false],
-                                            ['I','Harga',false],
+                                            ['G','Grade',false],
+                                            ['H','Satuan',false],
+                                            ['I','Stok Awal',false],
+                                            ['J','Stok Saat Ini',false],
+                                            ['K','Penanggung Jawab',false],
+                                            ['L','Tanggal Masuk',false],
+                                            ['M','Harga',false],
                                         ];
                                     @endphp
 
@@ -1267,7 +1269,7 @@ body {
                                     </div>
 
                                     <ul class="warn-list">
-                                        <li>Kode barang harus unik dan belum terdaftar.</li>
+                                        <li>Kode barang dibuat otomatis oleh sistem, jadi tidak perlu diisi di file Excel.</li>
                                         <li>Kondisi isi: <strong>baik</strong> / <strong>rusak</strong> / <strong>perbaikan</strong></li>
                                         <li>Tanggal format: <strong>YYYY-MM-DD</strong></li>
                                         <li>Harga isi angka saja tanpa titik/koma.</li>
