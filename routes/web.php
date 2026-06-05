@@ -36,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/recap', [AssetTransactionController::class, 'stockRecap'])
     ->name('transactions.stockRecap');
 
+    Route::get('/transactions/report', [AssetTransactionController::class, 'stockReport'])
+    ->name('transactions.report');
+
+    Route::get('/transactions/report/export', [AssetTransactionController::class, 'exportStockReport'])
+        ->name('transactions.report.export');
+
     Route::resource('assets', AssetController::class);
 
     Route::get('/scan', function () {
@@ -58,6 +64,15 @@ Route::middleware('auth')->group(function () {
     // Download Template Excel
     Route::get('/assets-template', [AssetController::class, 'template'])
         ->name('assets.template');
+    
+    Route::get('/scan-batches/{id}', [AssetTransactionController::class, 'showBatch'])
+    ->name('scan-batches.show');
+
+    Route::get('/scan-batches/{id}/export', [AssetTransactionController::class, 'exportBatch'])
+    ->name('scan-batches.export');
+
+    Route::get('/scan-batches/{id}/print-qr', [AssetTransactionController::class, 'printQrBatch'])
+    ->name('scan-batches.printQr');
 });
 require __DIR__.'/auth.php';
 

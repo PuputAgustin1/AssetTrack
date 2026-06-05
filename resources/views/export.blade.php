@@ -773,6 +773,14 @@ select.ctrl {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -783,7 +791,7 @@ select.ctrl {
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Export Excel
+            Export Data Barang
         </a>
 
         <a href="{{ route('assets.import.page') }}" class="nav-item">
@@ -792,7 +800,7 @@ select.ctrl {
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            Import Excel
+            Import Data Barang
         </a>
 
         <hr class="nav-divider">
@@ -815,7 +823,7 @@ select.ctrl {
     <div class="main">
         <div class="topbar">
             <div>
-                <h1>Export Excel</h1>
+                <h1>Export Data Barang</h1>
                 <p>Unduh data aset dalam format spreadsheet</p>
             </div>
 
@@ -854,11 +862,11 @@ select.ctrl {
                 <div class="breadcrumb">
                     <a href="/dashboard">Dashboard</a>
                     <span class="sep">›</span>
-                    <span>Export Excel</span>
+                    <span>Export Data Barang</span>
                 </div>
 
                 <div class="page-head">
-                    <h2>Export Data Aset</h2>
+                    <h2>Export Data Barang</h2>
                     <p>Atur filter terlebih dahulu untuk menentukan data yang akan diekspor ke Excel.</p>
                 </div>
 
@@ -951,11 +959,13 @@ select.ctrl {
                                 @php
                                     $columns = [
                                         'code'            => 'Kode Barang',
-                                        'name'            => 'Nama Aset',
+                                        'name'            => 'Nama Barang',
                                         'category'        => 'Kategori',
                                         'location'        => 'Lokasi',
                                         'condition'       => 'Kondisi',
-                                        'merk'            => 'Merk',
+                                        'merk'            => 'Buyer',
+                                        'warna'           => 'Style',
+                                        'ukuran'           => 'Grade',
                                         'penanggungjawab' => 'Penanggung Jawab',
                                         'tanggal_masuk'   => 'Tanggal Masuk',
                                         'harga'           => 'Harga',

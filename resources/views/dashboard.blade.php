@@ -708,6 +708,14 @@ tbody tr:hover td {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -944,8 +952,8 @@ tbody tr:hover td {
                     <table>
                         <thead>
                             <tr>
-                                <th>Kode Aset</th>
-                                <th>Nama Aset</th>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
                                 <th>Lokasi</th>
                                 <th>Kondisi</th>
                                 <th>Aksi</th>

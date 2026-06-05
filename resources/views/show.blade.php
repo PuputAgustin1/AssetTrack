@@ -777,6 +777,14 @@ body {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -889,7 +897,7 @@ body {
                             </div>
 
                             <div class="info-item">
-                                <div class="info-label">Merk</div>
+                                <div class="info-label">Buyer</div>
                                 <div class="info-value">{{ $asset->merk ?? '-' }}</div>
                             </div>
 
@@ -918,12 +926,12 @@ body {
                             </div>
 
                             <div class="info-item">
-                                <div class="info-label">Warna</div>
+                                <div class="info-label">Style</div>
                                 <div class="info-value">{{ $asset->warna ?? '-' }}</div>
                             </div>
 
                             <div class="info-item">
-                                <div class="info-label">ukuran</div>
+                                <div class="info-label">Grade</div>
                                 <div class="info-value">{{ $asset->ukuran ?? '-' }}</div>
                             </div>
 
@@ -989,7 +997,7 @@ body {
                         <div class="qr-code-label">{{ $asset->code }}</div>
 
                         <div class="qr-actions">
-                            <button class="btn-block btn-print" onclick="printQR()">
+                            <button type="button" class="btn-block btn-print" id="btnPrintQr">
                                 <svg viewBox="0 0 24 24">
                                     <polyline points="6 9 6 2 18 2 18 9"/>
                                     <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
@@ -998,7 +1006,13 @@ body {
                                 Print QR Code
                             </button>
 
-                            <button type="button" class="btn-block btn-download" onclick="downloadQRDetail()">
+                            <button
+                                type="button"
+                                class="btn-block btn-download"
+                                id="btnDownloadQr"
+                                data-asset-name="{{ $asset->name }}"
+                                data-asset-code="{{ $asset->code }}"
+                            >
                                 <svg viewBox="0 0 24 24">
                                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
                                     <polyline points="7 10 12 15 17 10"/>
@@ -1024,23 +1038,104 @@ body {
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const printButton = document.getElementById('btnPrintQr');
+    const downloadButton = document.getElementById('btnDownloadQr');
+
+    if (printButton) {
+        printButton.addEventListener('click', function () {
+            printQR();
+        });
+    }
+
+    if (downloadButton) {
+        downloadButton.addEventListener('click', function () {
+            downloadQRDetail();
+        });
+    }
+});
+
 function printQR() {
-    let printContents = document.getElementById('print-area').innerHTML;
+    const printArea = document.getElementById('print-area');
 
-    document.body.innerHTML = `
-        <div style="text-align:center;padding:40px;font-family:Arial, sans-serif;">
-            <h2 style="margin-bottom:16px;">{{ $asset->name }}</h2>
-            ${printContents}
-            <p style="margin-top:12px;font-family:monospace;">{{ $asset->code }}</p>
-        </div>
-    `;
+    if (!printArea) {
+        alert('QR Code tidak ditemukan.');
+        return;
+    }
 
-    window.print();
-    location.reload();
+    const printContents = printArea.innerHTML;
+    const downloadButton = document.getElementById('btnDownloadQr');
+
+    const assetName = downloadButton.dataset.assetName || 'Nama Barang';
+    const assetCode = downloadButton.dataset.assetCode || 'Kode Barang';
+
+    const printWindow = window.open('', '_blank');
+
+    if (!printWindow) {
+        alert('Popup diblokir browser. Izinkan popup untuk print QR.');
+        return;
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Print QR ${assetCode}</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    text-align: center;
+                    padding: 40px;
+                }
+
+                h2 {
+                    margin-bottom: 16px;
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+
+                .code {
+                    margin-top: 12px;
+                    font-family: monospace;
+                    font-size: 14px;
+                }
+
+                svg {
+                    width: 260px;
+                    height: 260px;
+                }
+            </style>
+        </head>
+        <body>
+            <h2>${assetName}</h2>
+            <div>${printContents}</div>
+            <div class="code">${assetCode}</div>
+
+            <script>
+                window.onload = function () {
+                    setTimeout(function () {
+                        window.print();
+                    }, 300);
+                };
+
+                window.onafterprint = function () {
+                    window.close();
+                };
+
+                setTimeout(function () {
+                    window.close();
+                }, 3000);
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
 }
 
 function downloadQRDetail() {
     const qrBox = document.getElementById('print-area');
+    const downloadButton = document.getElementById('btnDownloadQr');
 
     if (!qrBox) {
         alert('QR Code tidak ditemukan.');
@@ -1054,29 +1149,56 @@ function downloadQRDetail() {
         return;
     }
 
+    const assetName = downloadButton.dataset.assetName || 'barang';
+    const assetCode = downloadButton.dataset.assetCode || 'kode';
+
+    const safeName = assetName
+        .toString()
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .replace(/_+/g, '_');
+
+    const safeCode = assetCode
+        .toString()
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .replace(/_+/g, '_');
+
     const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const svgBlob = new Blob([svgData], {
+        type: 'image/svg+xml;charset=utf-8'
+    });
 
-    canvas.width = 300;
-    canvas.height = 300;
-
+    const url = URL.createObjectURL(svgBlob);
     const img = new Image();
 
     img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 320;
+        canvas.height = 320;
+
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 30, 30, 260, 260);
 
-        // Disamakan dengan QR download dari tabel aset
-        ctx.drawImage(img, 30, 30, 240, 240);
+        URL.revokeObjectURL(url);
 
         const link = document.createElement('a');
-        link.download = '{{ $asset->code }}-qrcode.png';
+        link.download = `QR_${safeName}_${safeCode}.png`;
         link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     };
 
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    img.onerror = function () {
+        URL.revokeObjectURL(url);
+        alert('Gagal mengunduh QR Code.');
+    };
+
+    img.src = url;
 }
 </script>
 

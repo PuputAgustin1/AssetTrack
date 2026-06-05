@@ -279,12 +279,11 @@ body {
     flex: 1;
 }
 
-.form-container {
-    max-width: 760px;
-    margin: 0 auto;
-}
-
 .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
     margin-bottom: 18px;
 }
 
@@ -299,119 +298,11 @@ body {
     color: var(--muted);
 }
 
-.alert {
-    background: var(--danger-light);
-    color: var(--danger);
-    border: 1px solid #fecaca;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 18px;
-}
-
-.card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.card-header span {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.card-body {
-    padding: 18px 20px;
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-.info-item {
-    border: 1px solid var(--border);
-    background: #fafafa;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-.info-label {
-    display: block;
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.info-value {
-    font-size: 13px;
-    font-weight: 600;
-    word-break: break-word;
-}
-
-.form-group {
-    margin-bottom: 14px;
-}
-
-.form-label {
-    display: block;
-    font-size: 12px;
-    color: var(--text);
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.form-control {
-    width: 100%;
-    min-height: 40px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 12px;
-    font-size: 13px;
-    font-family: var(--font);
-    outline: none;
-    background: #fff;
-}
-
-.form-control:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(26, 86, 219, .08);
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.error-text {
-    display: block;
-    color: var(--danger);
-    font-size: 12px;
-    margin-top: 5px;
-}
-
-.action-row {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 18px;
-}
-
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 9px 16px;
+    padding: 9px 14px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
@@ -432,9 +323,197 @@ textarea.form-control {
     border-color: var(--border);
 }
 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.card-body {
+    padding: 16px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-family: var(--font);
+    font-size: 13px;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(26,86,219,.08);
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+thead th {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 10px 16px;
+    text-align: left;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover td {
+    background: #fafafa;
+}
+
+.asset-code {
+    font-family: monospace;
+    font-size: 12px;
+    background: #f3f4f6;
+    padding: 3px 8px;
+    border-radius: 5px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.grade-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.empty-row {
+    text-align: center;
+    color: var(--muted);
+    padding: 32px 16px !important;
+}
+
+.pagination-wrap {
+    padding: 14px 16px;
+}
+
 /* MOBILE NAV */
 .mobile-nav {
     display: none;
+}
+
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -463,26 +542,42 @@ textarea.form-control {
         padding-bottom: 90px;
     }
 
+    .page-head {
+        flex-direction: column;
+    }
+
+    .page-head .btn {
+        width: 100%;
+    }
+
     .page-title {
         font-size: 20px;
     }
 
-    .info-grid {
+    .stats-grid,
+    .filter-grid {
         grid-template-columns: 1fr;
     }
 
-    .card-body {
-        padding: 14px;
-    }
-
-    .action-row {
+    .filter-actions {
         flex-direction: column-reverse;
     }
 
-    .action-row .btn,
-    .action-row button,
-    .action-row a {
+    .filter-actions .btn,
+    .filter-actions button {
         width: 100%;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    thead th,
+    tbody td {
+        padding: 10px 12px;
+        font-size: 12.5px;
     }
 
     .mobile-nav {
@@ -538,7 +633,7 @@ textarea.form-control {
             Dashboard
         </a>
 
-        <a href="/assets" class="nav-item active">
+        <a href="/assets" class="nav-item">
             <svg viewBox="0 0 24 24">
                 <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
                 <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
@@ -556,7 +651,7 @@ textarea.form-control {
             Scan QR
         </a>
 
-        <a href="{{ route('transactions.report') }}" class="nav-item">
+        <a href="{{ route('transactions.report') }}" class="nav-item active">
             <svg viewBox="0 0 24 24">
                 <path d="M3 3v18h18"/>
                 <path d="M7 15l4-4 3 3 5-6"/>
@@ -628,8 +723,8 @@ textarea.form-control {
     <div class="main">
         <div class="topbar">
             <div class="topbar-left">
-                <h1>Transaksi Barang</h1>
-                <p>Input transaksi barang masuk atau keluar</p>
+                <h1>Report Stok</h1>
+                <p>Laporan perhitungan stok barang stockload</p>
             </div>
 
             <div class="profile-dropdown">
@@ -659,103 +754,175 @@ textarea.form-control {
         </div>
 
         <div class="content">
-            <div class="form-container">
-                <div class="page-head">
-                    <h1 class="page-title">Transaksi Barang</h1>
-                    <p class="page-subtitle">Input transaksi barang masuk atau keluar berdasarkan data barang.</p>
+            <div class="page-head">
+                <div>
+                    <h1 class="page-title">Report Stok Barang</h1>
+                    <p class="page-subtitle">Laporan perhitungan stok berdasarkan data barang, transaksi IN/OUT, dan hasil scan.</p>
                 </div>
 
-                @if(session('error'))
-                    <div class="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
+                <a href="{{ route('transactions.report.export', request()->query()) }}" class="btn btn-primary">
+                    Export Report
+                </a>
+            </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <span>Informasi Barang</span>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="info-label">Kode Barang</span>
-                                <div class="info-value">{{ $asset->code }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Nama Barang</span>
-                                <div class="info-value">{{ $asset->name }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Buyer</span>
-                                <div class="info-value">{{ $asset->merk ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Style</span>
-                                <div class="info-value">{{ $asset->warna ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Grade</span>
-                                <div class="info-value">{{ $asset->ukuran ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Stok Saat Ini</span>
-                                <div class="info-value">{{ $asset->stok_saat_ini ?? 0 }} {{ $asset->satuan ?? 'pcs' }}</div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Barang</div>
+                    <div class="stat-value">{{ number_format($summary['total_barang']) }}</div>
                 </div>
 
-                <form method="POST" action="{{ route('transactions.store', $asset->code) }}" class="card">
-                    @csrf
+                <div class="stat-card">
+                    <div class="stat-label">Total Stok Awal</div>
+                    <div class="stat-value">{{ number_format($summary['total_stok_awal']) }}</div>
+                </div>
 
-                    <div class="card-header">
-                        <span>Form Transaksi</span>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total IN</div>
+                    <div class="stat-value">{{ number_format($summary['total_in']) }}</div>
+                </div>
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">Jenis Transaksi</label>
-                            <select name="type" required class="form-control">
-                                <option value="">— Pilih Transaksi —</option>
-                                <option value="IN" {{ old('type') == 'IN' ? 'selected' : '' }}>Barang Masuk / IN</option>
-                                <option value="OUT" {{ old('type') == 'OUT' ? 'selected' : '' }}>Barang Keluar / OUT</option>
-                            </select>
+                <div class="stat-card">
+                    <div class="stat-label">Total OUT</div>
+                    <div class="stat-value">{{ number_format($summary['total_out']) }}</div>
+                </div>
 
-                            @error('type')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
+                <div class="stat-card">
+                    <div class="stat-label">Stok Saat Ini</div>
+                    <div class="stat-value">{{ number_format($summary['total_stok_saat_ini']) }}</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Total Sesi Scan</div>
+                    <div class="stat-value">{{ number_format($summary['total_sesi_scan']) }}</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" action="{{ route('transactions.report') }}">
+                        <div class="filter-grid">
+                            <div class="form-group">
+                                <label>Cari Barang</label>
+                                <input type="text" name="search" class="form-control"
+                                    value="{{ request('search') }}"
+                                    placeholder="Kode / nama / buyer / style">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Buyer</label>
+                                <input type="text" name="buyer" class="form-control"
+                                    value="{{ request('buyer') }}"
+                                    placeholder="Nama buyer">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Style</label>
+                                <input type="text" name="style" class="form-control"
+                                    value="{{ request('style') }}"
+                                    placeholder="Kode style">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Grade</label>
+                                <select name="grade" class="form-control">
+                                    <option value="">Semua Grade</option>
+                                    <option value="A" {{ request('grade') == 'A' ? 'selected' : '' }}>A</option>
+                                    <option value="B" {{ request('grade') == 'B' ? 'selected' : '' }}>B</option>
+                                    <option value="ED" {{ request('grade') == 'ED' ? 'selected' : '' }}>ED</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Lokasi</label>
+                                <input type="text" name="location" class="form-control"
+                                    value="{{ request('location') }}"
+                                    placeholder="Contoh: Stockload">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tanggal Awal</label>
+                                <input type="date" name="date_from" class="form-control"
+                                    value="{{ request('date_from') }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tanggal Akhir</label>
+                                <input type="date" name="date_to" class="form-control"
+                                    value="{{ request('date_to') }}">
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Jumlah</label>
-                            <input type="number" name="quantity" value="{{ old('quantity', 1) }}" min="1" required class="form-control">
-
-                            @error('quantity')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
+                        <div class="filter-actions">
+                            <a href="{{ route('transactions.report') }}" class="btn btn-light">Reset</a>
+                            <button type="submit" class="btn btn-primary">Terapkan Filter</button>
                         </div>
+                    </form>
+                </div>
+            </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Keterangan</label>
-                            <textarea name="note" rows="3" placeholder="Opsional" class="form-control">{{ old('note') }}</textarea>
+            <div class="card">
+                <div class="card-header">
+                    <span>Detail Perhitungan Stok</span>
+                    <span style="font-size:12px;color:var(--muted);font-weight:500">{{ $assets->total() }} data</span>
+                </div>
 
-                            @error('note')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
-                        </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
+                                <th>Buyer</th>
+                                <th>Style</th>
+                                <th>Grade</th>
+                                <th>Lokasi</th>
+                                <th>Stok Awal</th>
+                                <th>Total IN</th>
+                                <th>Total OUT</th>
+                                <th>Pergerakan</th>
+                                <th>Stok Saat Ini</th>
+                                <th>Satuan</th>
+                            </tr>
+                        </thead>
 
-                        <div class="action-row">
-                            <a href="{{ route('assets.show', $asset->code) }}" class="btn btn-light">Batal</a>
-                            <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
-                        </div>
-                    </div>
-                </form>
+                        <tbody>
+                            @forelse($assets as $asset)
+                                @php
+                                    $totalIn = $asset->total_in ?? 0;
+                                    $totalOut = $asset->total_out ?? 0;
+                                    $pergerakan = $totalIn - $totalOut;
+                                @endphp
+
+                                <tr>
+                                    <td>
+                                        <span class="asset-code">{{ $asset->code }}</span>
+                                    </td>
+                                    <td style="font-weight:500">{{ $asset->name }}</td>
+                                    <td>{{ $asset->merk ?? '-' }}</td>
+                                    <td>{{ $asset->warna ?? '-' }}</td>
+                                    <td>
+                                        <span class="badge grade-badge">{{ $asset->ukuran ?? '-' }}</span>
+                                    </td>
+                                    <td>{{ $asset->location ?? '-' }}</td>
+                                    <td>{{ number_format($asset->stok_awal ?? 0) }}</td>
+                                    <td>{{ number_format($totalIn) }}</td>
+                                    <td>{{ number_format($totalOut) }}</td>
+                                    <td>{{ number_format($pergerakan) }}</td>
+                                    <td style="font-weight:600">{{ number_format($asset->stok_saat_ini ?? 0) }}</td>
+                                    <td>{{ $asset->satuan ?? 'pcs' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="12" class="empty-row">Belum ada data report.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-wrap">
+                    {{ $assets->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -763,9 +930,9 @@ textarea.form-control {
 
 <div class="mobile-nav">
     <a href="/dashboard">Dashboard</a>
-    <a href="/assets" class="active">Aset</a>
+    <a href="/assets">Aset</a>
     <a href="/scan">Scan</a>
-    <a href="{{ route('transactions.report') }}">Report</a>
+    <a href="{{ route('transactions.report') }}" class="active">Report</a>
 </div>
 
 <script>

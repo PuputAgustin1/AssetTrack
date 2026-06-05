@@ -978,6 +978,14 @@ body {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -988,7 +996,7 @@ body {
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Export Excel
+            Export Data Barang
         </a>
 
         <a href="{{ route('assets.import.page') }}" class="nav-item active">
@@ -997,7 +1005,7 @@ body {
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            Import Excel
+            Import Data Barang
         </a>
 
         <hr class="nav-divider">
@@ -1020,7 +1028,7 @@ body {
     <div class="main">
         <div class="topbar">
             <div>
-                <h1>Import Excel</h1>
+                <h1>Import Data Barang</h1>
                 <p>Upload data aset dari file spreadsheet</p>
             </div>
 
@@ -1059,11 +1067,11 @@ body {
                 <div class="breadcrumb">
                     <a href="/dashboard">Dashboard</a>
                     <span class="sep">›</span>
-                    <span>Import Excel</span>
+                    <span>Import Data Barang</span>
                 </div>
 
                 <div class="page-head">
-                    <h2>Import Data Aset</h2>
+                    <h2>Import Data Barang</h2>
                     <p>Upload file Excel (.xlsx / .xls / .csv) untuk menambahkan data aset secara massal.</p>
                 </div>
 
@@ -1216,7 +1224,9 @@ body {
                                             ['C','Kategori',true],
                                             ['D','Lokasi',true],
                                             ['E','Kondisi',true],
-                                            ['F','Merk',false],
+                                            ['F','Buyer',false],
+                                            ['F','Style',false],
+                                            ['F','Grade',false],
                                             ['G','Penanggung Jawab',false],
                                             ['H','Tanggal Masuk',false],
                                             ['I','Harga',false],

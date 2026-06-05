@@ -40,7 +40,6 @@ body {
     min-height: 100vh;
 }
 
-/* SIDEBAR */
 .sidebar {
     width: 220px;
     background: var(--sidebar);
@@ -153,7 +152,6 @@ body {
     background: var(--danger-light);
 }
 
-/* MAIN */
 .main {
     flex: 1;
     display: flex;
@@ -246,7 +244,6 @@ body {
     stroke-linejoin: round;
 }
 
-/* FORM */
 .form-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -297,6 +294,36 @@ body {
 
 .form-body {
     padding: 20px;
+}
+
+.auto-code-box {
+    grid-column: 1 / -1;
+    background: var(--accent-light);
+    border: 1px solid #c7d7fe;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+
+.auto-code-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 5px;
+}
+
+.auto-code-value {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.auto-code-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 5px;
 }
 
 .form-grid {
@@ -438,19 +465,16 @@ input.is-invalid {
     color: var(--text);
 }
 
-/* MOBILE NAV */
 .mobile-nav {
     display: none;
 }
 
-/* RESPONSIVE TABLET */
 @media (max-width: 1024px) {
     .form-card {
         max-width: 100%;
     }
 }
 
-/* RESPONSIVE HP */
 @media (max-width: 768px) {
     .sidebar {
         display: none;
@@ -490,7 +514,8 @@ input.is-invalid {
         gap: 15px;
     }
 
-    .form-group.full {
+    .form-group.full,
+    .auto-code-box {
         grid-column: auto;
     }
 
@@ -533,8 +558,6 @@ input.is-invalid {
 </style>
 
 <div class="layout">
-
-    {{-- SIDEBAR --}}
     <aside class="sidebar">
         <div class="brand">
             <div class="brand-icon">
@@ -580,6 +603,14 @@ input.is-invalid {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -595,7 +626,7 @@ input.is-invalid {
 
         <a href="{{ route('assets.import.page') }}" class="nav-item">
             <svg viewBox="0 0 24 24">
-                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
@@ -618,12 +649,11 @@ input.is-invalid {
         </form>
     </aside>
 
-    {{-- MAIN --}}
     <div class="main">
         <div class="topbar">
             <div>
                 <h1>Tambah Aset Baru</h1>
-                <p>Isi formulir di bawah ini</p>
+                <p>Kode barang dibuat otomatis oleh sistem</p>
             </div>
 
             <div class="topbar-right">
@@ -651,7 +681,7 @@ input.is-invalid {
 
                     <div>
                         <div class="form-title">Tambah Aset Baru</div>
-                        <div class="form-subtitle">Lengkapi semua informasi aset</div>
+                        <div class="form-subtitle">Lengkapi informasi barang. Kode akan dibuat otomatis.</div>
                     </div>
                 </div>
 
@@ -661,23 +691,18 @@ input.is-invalid {
                     <div class="form-body">
                         <div class="form-grid">
 
-                            <div class="form-group">
-                                <label class="form-label">Kode Barang <span class="req">*</span></label>
-                                <input type="text" name="code" value="{{ old('code') }}"
-                                    placeholder="Contoh: ELK-001"
-                                    class="{{ $errors->has('code') ? 'is-invalid' : '' }}">
-
-                                @error('code')
-                                    <span class="form-error">{{ $message }}</span>
-                                @enderror
-
-                                <span class="form-hint">Kode unik untuk identifikasi aset</span>
+                            <div class="auto-code-box">
+                                <div class="auto-code-label">Kode Barang Otomatis</div>
+                                <div class="auto-code-value">{{ $generatedCode ?? 'STK-YYYYMMDD-001' }}</div>
+                                <div class="auto-code-hint">
+                                    Kode ini hanya preview. Saat data disimpan, sistem akan memastikan kode tetap unik.
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Nama Aset <span class="req">*</span></label>
+                                <label class="form-label">Nama Barang <span class="req">*</span></label>
                                 <input type="text" name="name" value="{{ old('name') }}"
-                                    placeholder="Masukkan nama aset">
+                                    placeholder="Masukkan nama barang">
 
                                 @error('name')
                                     <span class="form-error">{{ $message }}</span>
@@ -688,12 +713,14 @@ input.is-invalid {
                                 <label class="form-label">Kategori <span class="req">*</span></label>
                                 <select name="category">
                                     <option value="">— Pilih Kategori —</option>
+                                    <option value="Stockload" {{ old('category') == 'Stockload' ? 'selected' : '' }}>Stockload</option>
                                     <option value="Elektronik" {{ old('category') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
                                     <option value="Mesin Produksi" {{ old('category') == 'Mesin Produksi' ? 'selected' : '' }}>Mesin Produksi</option>
                                     <option value="Furniture" {{ old('category') == 'Furniture' ? 'selected' : '' }}>Furniture</option>
                                     <option value="Inventaris Kantor" {{ old('category') == 'Inventaris Kantor' ? 'selected' : '' }}>Inventaris Kantor</option>
                                     <option value="Peralatan Gudang" {{ old('category') == 'Peralatan Gudang' ? 'selected' : '' }}>Peralatan Gudang</option>
                                     <option value="Kendaraan" {{ old('category') == 'Kendaraan' ? 'selected' : '' }}>Kendaraan</option>
+                                    
                                 </select>
 
                                 @error('category')
@@ -702,9 +729,9 @@ input.is-invalid {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Merk</label>
+                                <label class="form-label">Buyer <span class="req">*</span></label>
                                 <input type="text" name="merk" value="{{ old('merk') }}"
-                                    placeholder="Masukkan merk / brand">
+                                    placeholder="Masukkan nama buyer">
 
                                 @error('merk')
                                     <span class="form-error">{{ $message }}</span>
@@ -714,7 +741,7 @@ input.is-invalid {
                             <div class="form-group">
                                 <label class="form-label">Lokasi <span class="req">*</span></label>
                                 <input type="text" name="location" value="{{ old('location') }}"
-                                    placeholder="Contoh: Ruang IT, Lantai 2">
+                                    placeholder="Contoh: Stockload">
 
                                 @error('location')
                                     <span class="form-error">{{ $message }}</span>
@@ -736,7 +763,7 @@ input.is-invalid {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Penanggung Jawab</label>
+                                <label class="form-label">Penanggung Jawab <span class="req">*</span></label>
                                 <input type="text" name="penanggungjawab" value="{{ old('penanggungjawab') }}"
                                     placeholder="Nama penanggung jawab">
 
@@ -746,7 +773,7 @@ input.is-invalid {
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Tanggal Masuk</label>
+                                <label class="form-label">Tanggal Masuk <span class="req">*</span></label>
                                 <input type="date" name="tanggal_masuk" value="{{ old('tanggal_masuk') }}">
 
                                 @error('tanggal_masuk')
@@ -754,8 +781,33 @@ input.is-invalid {
                                 @enderror
                             </div>
 
+                            <div class="form-group">
+                                <label class="form-label">Style</label>
+                                <input type="text" name="warna" id="warna" value="{{ old('warna') }}" placeholder="Masukkan style">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Grade</label>
+                                <select name="ukuran" id="ukuran">
+                                    <option value="">— Pilih Grade —</option>
+                                    <option value="A" {{ old('ukuran') == 'A' ? 'selected' : '' }}>A</option>
+                                    <option value="B" {{ old('ukuran') == 'B' ? 'selected' : '' }}>B</option>
+                                    <option value="ED" {{ old('ukuran') == 'ED' ? 'selected' : '' }}>ED</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Satuan</label>
+                                <input type="text" name="satuan" id="satuan" value="{{ old('satuan', 'pcs') }}" placeholder="Contoh: pcs">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Stok Awal</label>
+                                <input type="number" name="stok_awal" id="stok_awal" value="{{ old('stok_awal', 0) }}" min="0">
+                            </div>
+
                             <div class="form-group full">
-                                <label class="form-label">Harga Perolehan</label>
+                                <label class="form-label">Harga Perolehan <span class="req">*</span></label>
 
                                 <div class="input-prefix-wrap">
                                     <span class="prefix">Rp</span>
@@ -769,31 +821,6 @@ input.is-invalid {
                                 @enderror
 
                                 <span class="form-hint">Masukkan angka tanpa titik atau koma</span>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">warna</label>
-                                <input type="text" name="warna" id="warna" value="{{ old('warna') }}" placeholder="Contoh: Hitam">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Ukuran</label>
-                                <input type="text" name="ukuran" id="ukuran" value="{{ old('ukuran') }}" placeholder="Contoh: M / L / XL">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Satuan</label>
-                                <input type="text" name="satuan" id="satuan" value="{{ old('satuan', 'pcs') }}" placeholder="Contoh: pcs">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Stok Awal</label>
-                                <input type="number" name="stok_awal" id="stok_awal" value="{{ old('stok_awal', 0) }}" min="0">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Stok Saat Ini</label>
-                                <input type="number" name="stok_saat_ini" id="stok_saat_ini" value="{{ old('stok_saat_ini', 0) }}" min="0">
                             </div>
 
                         </div>
@@ -817,7 +844,6 @@ input.is-invalid {
     </div>
 </div>
 
-{{-- MOBILE NAV --}}
 <div class="mobile-nav">
     <a href="/dashboard">Dashboard</a>
     <a href="/assets" class="active">Aset</a>

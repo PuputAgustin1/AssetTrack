@@ -10,9 +10,32 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private function generateAssetCode()
+    {
+        $prefix = 'STK';
+        $date = now()->format('Ymd');
+
+        $lastAsset = Asset::where('code', 'like', $prefix . '-' . $date . '-%')
+            ->orderBy('code', 'desc')
+            ->first();
+
+        if ($lastAsset) {
+            $lastNumber = (int) substr($lastAsset->code, -3);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        $newCode = $prefix . '-' . $date . '-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        while (Asset::where('code', $newCode)->exists()) {
+            $newNumber++;
+            $newCode = $prefix . '-' . $date . '-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        }
+
+        return $newCode;
+    }
+
     public function index(Request $request)
     {
         $search = $request->search;
@@ -22,7 +45,7 @@ class AssetController extends Controller
 
         $assets = Asset::query()
             ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search){
+                $query->where(function ($q) use ($search) {
                     $q->where('code', 'like', "%$search%")
                         ->orWhere('name', 'like', "%$search%")
                         ->orWhere('category', 'like', "%$search%")
@@ -31,133 +54,118 @@ class AssetController extends Controller
                         ->orWhere('penanggungjawab', 'like', "%$search%")
                         ->orWhere('tanggal_masuk', 'like', "%$search%");
                 });
-        })
-        ->when($category, function ($query, $category) {
-            return $query->where('category', $category);
-        })
-        ->when($condition, function ($query, $condition) {
-            return $query->where('condition', $condition);
-        })
-        ->when($tanggal_masuk, function ($query, $tanggal_masuk) {
-            return $query->where('tanggal_masuk', $tanggal_masuk);
-        })
-        ->latest()
-        ->paginate(10)
-        ->withQueryString();
+            })
+            ->when($category, function ($query, $category) {
+                return $query->where('category', $category);
+            })
+            ->when($condition, function ($query, $condition) {
+                return $query->where('condition', $condition);
+            })
+            ->when($tanggal_masuk, function ($query, $tanggal_masuk) {
+                return $query->where('tanggal_masuk', $tanggal_masuk);
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view('index', compact('assets'));
- 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('create');
+        $generatedCode = $this->generateAssetCode();
+
+        return view('create', compact('generatedCode'));
     }
 
     public function store(Request $request)
     {
-    $request->validate([
-        'code' => 'required|unique:assets,code',
-        'name' => 'required',
-        'category' => 'required',
-        'location' => 'required',
-        'condition' => 'required',
-        'merk' => 'required',
-        'penanggungjawab' => 'required',
-        'tanggal_masuk' => 'required',
-        'harga' => 'required',
-        'warna' => 'nullable|string|max:255',
-        'ukuran' => 'nullable|string|max:255',
-        'satuan' => 'nullable|string|max:50',
-        'stok_awal' => 'nullable|integer|min:0',
-                
+        $request->validate([
+            'name' => 'required',
+            'category' => 'required',
+            'location' => 'required',
+            'condition' => 'required',
+            'merk' => 'required',
+            'penanggungjawab' => 'required',
+            'tanggal_masuk' => 'required',
+            'harga' => 'required',
+            'warna' => 'nullable|string|max:255',
+            'ukuran' => 'nullable|string|max:255',
+            'satuan' => 'nullable|string|max:50',
+            'stok_awal' => 'nullable|integer|min:0',
+        ]);
 
-    ], [
-        'code.unique' => 'Kode aset sudah digunakan',
+        $generatedCode = $this->generateAssetCode();
 
-    ]);
         Asset::create([
-        'code' => $request->code,
-        'name' => $request->name,
-        'category' => $request->category,
-        'location' => $request->location,
-        'condition' => $request->condition,
-        'merk' => $request->merk,
-        'penanggungjawab' => $request->penanggungjawab,
-        'tanggal_masuk' => $request->tanggal_masuk,
-        'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
-        'warna' => $request->warna,
-        'ukuran' => $request->ukuran,
-        'satuan' => $request->satuan ?? 'pcs',
-        'stok_awal' => $request->stok_awal ?? 0,
-        'stok_saat_ini' => $request->stok_awal ?? 0,
+            'code' => $generatedCode,
+            'name' => $request->name,
+            'category' => $request->category,
+            'location' => $request->location,
+            'condition' => $request->condition,
+            'merk' => $request->merk,
+            'penanggungjawab' => $request->penanggungjawab,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
+            'warna' => $request->warna,
+            'ukuran' => $request->ukuran,
+            'satuan' => $request->satuan ?? 'pcs',
+            'stok_awal' => $request->stok_awal ?? 0,
+            'stok_saat_ini' => $request->stok_awal ?? 0,
+        ]);
 
-    ]);
-
-    return redirect('/assets');
-
+        return redirect('/assets')->with('success', 'Data berhasil ditambahkan dengan kode ' . $generatedCode);
     }
+
     public function show(Asset $asset)
     {
         return view('show', compact('asset'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Asset $asset)
     {
         return view('edit', compact('asset'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Asset $asset)
     {
         $request->validate([
-        'code' => 'required|unique:assets,code,' . $asset->code . ',code',
-        'name' => 'required',
-        'category' => 'required',
-        'location' => 'required',
-        'condition' => 'required',
-        'merk' => 'required',
-        'penanggungjawab' => 'required',
-        'tanggal_masuk' => 'required',
-        'harga' => 'required',
-        'warna' => 'nullable|string|max:255',
-        'ukuran' => 'nullable|string|max:255',
-        'satuan' => 'nullable|string|max:50',
-        'stok_awal' => 'nullable|integer|min:0',
-        'stok_saat_ini' => 'nullable|integer|min:0',
-    ]);
+            'code' => 'required|unique:assets,code,' . $asset->code . ',code',
+            'name' => 'required',
+            'category' => 'required',
+            'location' => 'required',
+            'condition' => 'required',
+            'merk' => 'required',
+            'penanggungjawab' => 'required',
+            'tanggal_masuk' => 'required',
+            'harga' => 'required',
+            'warna' => 'nullable|string|max:255',
+            'ukuran' => 'nullable|string|max:255',
+            'satuan' => 'nullable|string|max:50',
+            'stok_awal' => 'nullable|integer|min:0',
+            'stok_saat_ini' => 'nullable|integer|min:0',
+        ]);
 
-    $asset->update([
-        'code' => $request->code,
-        'name' => $request->name,
-        'category' => $request->category,
-        'location' => $request->location,
-        'condition' => $request->condition,
-        'merk' => $request->merk,
-        'penanggungjawab' => $request->penanggungjawab,
-        'tanggal_masuk' => $request->tanggal_masuk,
-        'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
-        'warna' => $request->warna,
-        'ukuran' => $request->ukuran,
-        'satuan' => $request->satuan ?? 'pcs',
-        'stok_awal' => $request->stok_awal ?? 0,
-        'stok_saat_ini' => $request->stok_saat_ini ?? 0,
-    ]);
+        $asset->update([
+            'code' => $request->code,
+            'name' => $request->name,
+            'category' => $request->category,
+            'location' => $request->location,
+            'condition' => $request->condition,
+            'merk' => $request->merk,
+            'penanggungjawab' => $request->penanggungjawab,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'harga' => str_replace(['Rp', 'rp', '.', ',', ' '], '', $request->harga),
+            'warna' => $request->warna,
+            'ukuran' => $request->ukuran,
+            'satuan' => $request->satuan ?? 'pcs',
+            'stok_awal' => $request->stok_awal ?? 0,
+            'stok_saat_ini' => $request->stok_saat_ini ?? 0,
+        ]);
 
-    return redirect('/assets')->with('success', 'Data berhasil diupdate');
+        return redirect('/assets')->with('success', 'Data berhasil diupdate');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Asset $asset)
     {
         $asset->delete();
@@ -207,7 +215,7 @@ class AssetController extends Controller
     {
         return view('import');
     }
-    
+
     public function export(Request $request)
     {
         $filters = [
@@ -225,6 +233,11 @@ class AssetController extends Controller
             'location',
             'condition',
             'merk',
+            'warna',
+            'ukuran',
+            'satuan',
+            'stok_awal',
+            'stok_saat_ini',
             'penanggungjawab',
             'tanggal_masuk',
             'harga',
@@ -236,7 +249,7 @@ class AssetController extends Controller
     public function import(Request $request)
     {
         $request->validate([
-        'file' => 'required|mimes:xlsx,xls,csv|max:5120',
+            'file' => 'required|mimes:xlsx,xls,csv|max:5120',
         ], [
             'file.required' => 'File Excel wajib diupload.',
             'file.mimes' => 'File harus berformat xlsx, xls, atau csv.',
@@ -248,12 +261,12 @@ class AssetController extends Controller
 
             return redirect()->route('assets.import.page')
                 ->with('success', 'Data aset berhasil diimport.');
-
         } catch (\Throwable $e) {
             return redirect()->route('assets.import.page')
                 ->with('error', 'Import gagal: ' . $e->getMessage());
         }
     }
+
     public function template()
     {
         $filePath = public_path('templates/template_import_aset.xlsx');
@@ -268,5 +281,4 @@ class AssetController extends Controller
             'Expires' => '0',
         ]);
     }
-
 }

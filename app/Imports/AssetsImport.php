@@ -25,10 +25,19 @@ class AssetsImport implements ToCollection, WithStartRow
             $category = trim((string) ($row[2] ?? ''));
             $location = trim((string) ($row[3] ?? ''));
             $condition = strtolower(trim((string) ($row[4] ?? '')));
-            $merk = trim((string) ($row[5] ?? ''));
-            $penanggungjawab = trim((string) ($row[6] ?? ''));
-            $tanggalMasuk = $row[7] ?? null;
-            $harga = $row[8] ?? 0;
+
+            // Kolom stockload, tetap masuk ke kolom database lama
+            $buyer = trim((string) ($row[5] ?? ''));   // masuk ke merk
+            $style = trim((string) ($row[6] ?? ''));   // masuk ke warna
+            $grade = trim((string) ($row[7] ?? ''));   // masuk ke ukuran
+
+            $satuan = trim((string) ($row[8] ?? 'pcs'));
+            $stokAwal = $row[9] ?? 0;
+            $stokSaatIni = $row[10] ?? null;
+
+            $penanggungjawab = trim((string) ($row[11] ?? ''));
+            $tanggalMasuk = $row[12] ?? null;
+            $harga = $row[13] ?? 0;
 
             // Lewati baris kosong
             if (
@@ -36,27 +45,37 @@ class AssetsImport implements ToCollection, WithStartRow
                 $name === '' &&
                 $category === '' &&
                 $location === '' &&
-                $condition === ''
+                $buyer === '' &&
+                $style === '' &&
+                $grade === ''
             ) {
                 continue;
             }
 
-            // Kalau kode barang kosong, lewati saja supaya tidak error
+            // Kalau kode barang kosong, lewati agar tidak error
             if ($code === '') {
                 continue;
             }
 
             // Default kalau ada data kosong
             $name = $name ?: '-';
-            $category = $category ?: '-';
-            $location = $location ?: '-';
+            $category = $category ?: 'Stockload';
+            $location = $location ?: 'Stockload';
             $condition = $condition ?: 'baik';
-            $merk = $merk ?: '-';
-            $penanggungjawab = $penanggungjawab ?: '-';
+            $buyer = $buyer ?: '-';
+            $style = $style ?: '-';
+            $grade = strtoupper($grade ?: '-');
+            $satuan = $satuan ?: 'pcs';
+            $penanggungjawab = $penanggungjawab ?: 'Stockload';
 
             // Normalisasi kondisi
             if (!in_array($condition, ['baik', 'rusak', 'perbaikan'])) {
                 $condition = 'baik';
+            }
+
+            // Normalisasi grade
+            if (!in_array($grade, ['A', 'B', 'ED'])) {
+                $grade = '-';
             }
 
             // Format tanggal dari Excel
@@ -75,6 +94,27 @@ class AssetsImport implements ToCollection, WithStartRow
 
             $harga = $harga ?: 0;
 
+            // Bersihkan stok
+            $stokAwal = is_numeric($stokAwal)
+                ? (int) $stokAwal
+                : (int) str_replace(['.', ',', ' '], '', (string) $stokAwal);
+
+            if ($stokAwal < 0) {
+                $stokAwal = 0;
+            }
+
+            if ($stokSaatIni === null || $stokSaatIni === '') {
+                $stokSaatIni = $stokAwal;
+            } else {
+                $stokSaatIni = is_numeric($stokSaatIni)
+                    ? (int) $stokSaatIni
+                    : (int) str_replace(['.', ',', ' '], '', (string) $stokSaatIni);
+
+                if ($stokSaatIni < 0) {
+                    $stokSaatIni = 0;
+                }
+            }
+
             // Kalau code sudah ada, update. Kalau belum ada, create.
             Asset::updateOrCreate(
                 ['code' => $code],
@@ -83,7 +123,12 @@ class AssetsImport implements ToCollection, WithStartRow
                     'category' => $category,
                     'location' => $location,
                     'condition' => $condition,
-                    'merk' => $merk,
+                    'merk' => $buyer,
+                    'warna' => $style,
+                    'ukuran' => $grade,
+                    'satuan' => $satuan,
+                    'stok_awal' => $stokAwal,
+                    'stok_saat_ini' => $stokSaatIni,
                     'penanggungjawab' => $penanggungjawab,
                     'tanggal_masuk' => $tanggalMasuk,
                     'harga' => $harga,

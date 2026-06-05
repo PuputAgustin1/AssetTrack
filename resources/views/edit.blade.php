@@ -976,6 +976,14 @@ select.ctrl {
             Scan QR
         </a>
 
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
+        </a>
+
         <hr class="nav-divider">
 
         <div class="nav-label">Data</div>
@@ -1095,7 +1103,7 @@ select.ctrl {
                                 </div>
 
                                 <div class="fg">
-                                    <label class="lbl">Nama Aset <span class="req">*</span></label>
+                                    <label class="lbl">Nama Barang<span class="req">*</span></label>
 
                                     <input type="text"
                                         name="name"
@@ -1119,7 +1127,7 @@ select.ctrl {
                                     <label class="lbl">Kategori <span class="req">*</span></label>
 
                                     <select name="category" class="ctrl {{ $errors->has('category') ? 'is-invalid' : '' }}">
-                                        @foreach(['Elektronik','Mesin Produksi','Furniture','Inventaris Kantor','Peralatan Gudang','Kendaraan'] as $cat)
+                                        @foreach(['Stockload','Elektronik','Mesin Produksi','Furniture','Inventaris Kantor','Peralatan Gudang','Kendaraan'] as $cat)
                                             <option value="{{ $cat }}" {{ old('category', $asset->category) == $cat ? 'selected' : '' }}>
                                                 {{ $cat }}
                                             </option>
@@ -1139,13 +1147,13 @@ select.ctrl {
                                 </div>
 
                                 <div class="fg">
-                                    <label class="lbl">Merk</label>
+                                    <label class="lbl">Buyer</label>
 
                                     <input type="text"
                                         name="merk"
                                         class="ctrl"
                                         value="{{ old('merk', $asset->merk) }}"
-                                        placeholder="Merk aset">
+                                        placeholder="Masukkan nama buyer">
                                 </div>
 
                             </div>
@@ -1162,7 +1170,7 @@ select.ctrl {
                                 </svg>
                             </div>
 
-                            <span class="card-title">Lokasi & Status</span>
+                            <span class="card-title">Detail Barang</span>
                         </div>
 
                         <div class="card-body">
@@ -1175,7 +1183,7 @@ select.ctrl {
                                         name="location"
                                         class="ctrl {{ $errors->has('location') ? 'is-invalid' : '' }}"
                                         value="{{ old('location', $asset->location) }}"
-                                        placeholder="Lokasi aset">
+                                        placeholder="Contoh: Stockload">
 
                                     @error('location')
                                         <span class="invalid-msg">
@@ -1196,7 +1204,7 @@ select.ctrl {
                                         name="penanggungjawab"
                                         class="ctrl"
                                         value="{{ old('penanggungjawab', $asset->penanggungjawab) }}"
-                                        placeholder="Nama penanggung jawab">
+                                        placeholder="Contoh: Stockload">
                                 </div>
 
                                 <div class="fg full">
@@ -1238,35 +1246,64 @@ select.ctrl {
                                     @enderror
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="warna">Warna</label>
-                                    <input type="text" name="warna" id="warna" value="{{ old('warna', $asset->warna) }}" placeholder="Contoh: Hitam">
+                                <div class="fg">
+                                    <label class="lbl">Style</label>
+
+                                    <input type="text"
+                                        name="warna"
+                                        id="warna"
+                                        class="ctrl"
+                                        value="{{ old('warna', $asset->warna) }}"
+                                        placeholder="Contoh: ST-001">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="ukuran">Ukuran</label>
-                                    <input type="text" name="ukuran" id="ukuran" value="{{ old('ukuran', $asset->ukuran) }}" placeholder="Contoh: M / L / XL">
+                                <div class="fg">
+                                    <label class="lbl">Grade</label>
+
+                                    <select name="ukuran" id="ukuran" class="ctrl">
+                                        <option value="">— Pilih Grade —</option>
+                                        <option value="A" {{ old('ukuran', $asset->ukuran) == 'A' ? 'selected' : '' }}>A</option>
+                                        <option value="B" {{ old('ukuran', $asset->ukuran) == 'B' ? 'selected' : '' }}>B</option>
+                                        <option value="ED" {{ old('ukuran', $asset->ukuran) == 'ED' ? 'selected' : '' }}>ED</option>
+                                    </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="satuan">Satuan</label>
-                                    <input type="text" name="satuan" id="satuan" value="{{ old('satuan', $asset->satuan ?? 'pcs') }}" placeholder="Contoh: pcs">
+                                <div class="fg">
+                                    <label class="lbl">Satuan</label>
+
+                                    <input type="text"
+                                        name="satuan"
+                                        id="satuan"
+                                        class="ctrl"
+                                        value="{{ old('satuan', $asset->satuan ?? 'pcs') }}"
+                                        placeholder="Contoh: pcs">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="stok_awal">Stok Awal</label>
-                                    <input type="number" name="stok_awal" id="stok_awal" value="{{ old('stok_awal', $asset->stok_awal) }}" min="0">
+                                <div class="fg">
+                                    <label class="lbl">Stok Awal</label>
+
+                                    <input type="number"
+                                        name="stok_awal"
+                                        id="stok_awal"
+                                        class="ctrl"
+                                        value="{{ old('stok_awal', $asset->stok_awal) }}"
+                                        min="0">
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="stok_saat_ini">Stok Saat Ini</label>
-                                    <input type="number" name="stok_saat_ini" id="stok_saat_ini" value="{{ old('stok_saat_ini', $asset->stok_saat_ini) }}" min="0">
+                                <div class="fg">
+                                    <label class="lbl">Stok Saat Ini</label>
+
+                                    <input type="number"
+                                        name="stok_saat_ini"
+                                        id="stok_saat_ini"
+                                        class="ctrl"
+                                        value="{{ old('stok_saat_ini', $asset->stok_saat_ini) }}"
+                                        min="0">
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
                     {{-- DATA PEMBELIAN --}}
                     <div class="card">
                         <div class="card-hdr">
@@ -1340,7 +1377,7 @@ select.ctrl {
                         </div>
 
                         <div class="ip-row">
-                            <span class="ip-label">Kode</span>
+                            <span class="ip-label">Kode Barang</span>
                             <span class="ip-value asset-code-small">{{ $asset->code }}</span>
                         </div>
 

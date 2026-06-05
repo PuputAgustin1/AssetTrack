@@ -661,7 +661,14 @@ tbody tr:hover td {
 .qr-box {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-bottom: 6px;
+}
+
+.qr-box svg {
+    width: 82px;
+    height: 82px;
+    display: block;
 }
 
 .btn-download {
@@ -802,10 +809,11 @@ tbody tr:hover td {
         justify-content: flex-start;
         min-width: max-content;
     }
+
     .qr-box svg {
-        width: 70px;
-        height: 70px;
-        display: block;
+    width: 72px;
+    height: 72px;
+    display: block;
     }
 
 }
@@ -856,6 +864,14 @@ tbody tr:hover td {
                 <path d="M3 17.5A3.5 3.5 0 006.5 21M3 14v3.5M6.5 14H3"/>
             </svg>
             Scan QR
+        </a>
+
+        <a href="{{ route('transactions.report') }}" class="nav-item">
+            <svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18"/>
+                <path d="M7 15l4-4 3 3 5-6"/>
+            </svg>
+            Report Stok
         </a>
 
         <hr class="nav-divider">
@@ -992,6 +1008,7 @@ tbody tr:hover td {
                     <div class="filter-label">Kategori</div>
                     <select name="category">
                         <option value="">Semua Kategori</option>
+                        <option value="Stockload" {{ request('category') == 'Stockload' ? 'selected' : '' }}>Stockload</option>
                         <option value="Elektronik" {{ request('category') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
                         <option value="Mesin Produksi" {{ request('category') == 'Mesin Produksi' ? 'selected' : '' }}>Mesin Produksi</option>
                         <option value="Furniture" {{ request('category') == 'Furniture' ? 'selected' : '' }}>Furniture</option>
@@ -1031,12 +1048,12 @@ tbody tr:hover td {
                         <thead>
                             <tr>
                                 <th>Kode Barang</th>
-                                <th>Nama Aset</th>
+                                <th>Nama Barang</th>
                                 <th>Kategori</th>
                                 <th>Lokasi</th>
-                                <th>Merk</th>
-                                <th>Warna</th>
-                                <th>Ukuran</th>
+                                <th>Buyer</th>
+                                <th>Style</th>
+                                <th>Grade</th>
                                 <th>Stok</th>
                                 <th>Penanggung Jawab</th>
                                 <th>Tgl Masuk</th>
@@ -1057,7 +1074,7 @@ tbody tr:hover td {
                                     <td style="font-size:12px">{{ $asset->merk }}</td>
                                     <td>{{ $asset->warna ?? '-' }}</td>
                                     <td>{{ $asset->ukuran ?? '-' }}</td>
-                                    <<td>
+                                    <td>
                                         <span class="stock-badge {{ ($asset->stok_saat_ini ?? 0) <= 0 ? 'empty' : '' }}">
                                             {{ $asset->stok_saat_ini ?? 0 }} {{ $asset->satuan ?? 'pcs' }}
                                         </span>
@@ -1078,16 +1095,22 @@ tbody tr:hover td {
                                         @endphp
 
                                         <td class="harga-cell">Rp {{ $hargaTampil }}</td>
-                                    </td>
+                                    
 
                                     <td style="text-align:center">
-                                        <div class="qr-box" id="qr-{{ $asset->code }}">
-                                            {!! QrCode::size(160)->margin(2)->generate(route('assets.show', $asset->code)) !!}
+                                        @php
+                                            $qrId = 'qr-' . preg_replace('/[^A-Za-z0-9_-]/', '_', $asset->code);
+                                        @endphp
+
+                                        <div class="qr-box" id="{{ $qrId }}">
+                                            {!! QrCode::size(90)->margin(2)->generate(route('assets.show', $asset->code)) !!}
                                         </div>
 
                                         <button type="button"
-                                            class="btn-xs btn-download"
-                                            onclick="downloadQR('{{ $asset->code }}')">
+                                            class="btn-xs btn-download btn-download-qr"
+                                            data-qr-id="{{ $qrId }}"
+                                            data-code="{{ $asset->code }}"
+                                            data-name="{{ $asset->name }}">
                                             Unduh
                                         </button>
                                     </td>
@@ -1169,26 +1192,37 @@ tbody tr:hover td {
 </div>
 
 <script>
-function toggleProfileMenu(){
-    document.getElementById('profileMenu')
-        .classList.toggle('show');
+function toggleProfileMenu() {
+    const menu = document.getElementById('profileMenu');
+
+    if (menu) {
+        menu.classList.toggle('show');
+    }
 }
 
-window.addEventListener('click', function(e){
-
+window.addEventListener('click', function(e) {
     const dropdown = document.querySelector('.profile-dropdown');
+    const menu = document.getElementById('profileMenu');
 
-    if(!dropdown.contains(e.target)){
-        document.getElementById('profileMenu')
-            .classList.remove('show');
+    if (dropdown && menu && !dropdown.contains(e.target)) {
+        menu.classList.remove('show');
     }
-
 });
-</script>
 
-<script>
-function downloadQR(code) {
-    const qrBox = document.getElementById('qr-' + code);
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-download-qr').forEach(function (button) {
+        button.addEventListener('click', function () {
+            downloadQRFromTable(
+                button.dataset.qrId,
+                button.dataset.code,
+                button.dataset.name
+            );
+        });
+    });
+});
+
+function downloadQRFromTable(qrId, code, name) {
+    const qrBox = document.getElementById(qrId);
 
     if (!qrBox) {
         alert('QR Code tidak ditemukan.');
@@ -1202,27 +1236,62 @@ function downloadQR(code) {
         return;
     }
 
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const safeName = (name || 'barang')
+        .toString()
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '');
 
-    canvas.width = 300;
-    canvas.height = 300;
+    const safeCode = (code || 'kode')
+        .toString()
+        .trim()
+        .replace(/[^a-zA-Z0-9_-]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '');
 
+    const clonedSvg = svg.cloneNode(true);
+    clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clonedSvg.setAttribute('width', '280');
+    clonedSvg.setAttribute('height', '280');
+
+    const svgData = new XMLSerializer().serializeToString(clonedSvg);
+    const svgBlob = new Blob([svgData], {
+        type: 'image/svg+xml;charset=utf-8'
+    });
+
+    const url = URL.createObjectURL(svgBlob);
     const img = new Image();
 
     img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 360;
+        canvas.height = 360;
+
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 80, 80, 640, 640);
+
+        ctx.drawImage(img, 40, 40, 280, 280);
+
+        URL.revokeObjectURL(url);
 
         const link = document.createElement('a');
-        link.download = code + '-qrcode.png';
+        link.download = `QR_${safeName || 'barang'}_${safeCode || 'kode'}.png`;
         link.href = canvas.toDataURL('image/png');
+
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     };
 
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    img.onerror = function () {
+        URL.revokeObjectURL(url);
+        alert('Gagal membuat file QR Code.');
+    };
+
+    img.src = url;
 }
 </script>
 

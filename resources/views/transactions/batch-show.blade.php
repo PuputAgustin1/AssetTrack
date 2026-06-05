@@ -279,12 +279,11 @@ body {
     flex: 1;
 }
 
-.form-container {
-    max-width: 760px;
-    margin: 0 auto;
-}
-
 .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
     margin-bottom: 18px;
 }
 
@@ -299,119 +298,17 @@ body {
     color: var(--muted);
 }
 
-.alert {
-    background: var(--danger-light);
-    color: var(--danger);
-    border: 1px solid #fecaca;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 18px;
-}
-
-.card-header {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.card-header span {
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.card-body {
-    padding: 18px 20px;
-}
-
-.info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-.info-item {
-    border: 1px solid var(--border);
-    background: #fafafa;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-.info-label {
-    display: block;
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 5px;
-}
-
-.info-value {
-    font-size: 13px;
-    font-weight: 600;
-    word-break: break-word;
-}
-
-.form-group {
-    margin-bottom: 14px;
-}
-
-.form-label {
-    display: block;
-    font-size: 12px;
-    color: var(--text);
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.form-control {
-    width: 100%;
-    min-height: 40px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 12px;
-    font-size: 13px;
-    font-family: var(--font);
-    outline: none;
-    background: #fff;
-}
-
-.form-control:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(26, 86, 219, .08);
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 90px;
-}
-
-.error-text {
-    display: block;
-    color: var(--danger);
-    font-size: 12px;
-    margin-top: 5px;
-}
-
 .action-row {
     display: flex;
-    justify-content: flex-end;
     gap: 8px;
-    margin-top: 18px;
+    flex-wrap: wrap;
 }
 
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 9px 16px;
+    padding: 9px 14px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
@@ -432,9 +329,162 @@ textarea.form-control {
     border-color: var(--border);
 }
 
+.btn-green {
+    background: var(--success);
+    color: #fff;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+
+.card-body {
+    padding: 18px 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.info-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    background: #fafafa;
+}
+
+.info-label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 13px;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.info-span-2 {
+    grid-column: span 2;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 22px 0 12px;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+}
+
+thead th {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 10px 16px;
+    text-align: left;
+    background: #fafafa;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+tbody td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover td {
+    background: #fafafa;
+}
+
+.asset-code {
+    font-family: monospace;
+    font-size: 12px;
+    background: #f3f4f6;
+    padding: 3px 8px;
+    border-radius: 5px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.type-in {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.type-out {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.type-mixed {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+.grade-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.stock-badge {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.empty-row {
+    text-align: center;
+    color: var(--muted);
+    padding: 32px 16px !important;
+}
+
 /* MOBILE NAV */
 .mobile-nav {
     display: none;
+}
+
+@media (max-width: 1024px) {
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -463,26 +513,39 @@ textarea.form-control {
         padding-bottom: 90px;
     }
 
+    .page-head {
+        flex-direction: column;
+    }
+
     .page-title {
         font-size: 20px;
+    }
+
+    .action-row {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .action-row .btn {
+        width: 100%;
     }
 
     .info-grid {
         grid-template-columns: 1fr;
     }
 
+    .info-span-2 {
+        grid-column: auto;
+    }
+
     .card-body {
         padding: 14px;
     }
 
-    .action-row {
-        flex-direction: column-reverse;
-    }
-
-    .action-row .btn,
-    .action-row button,
-    .action-row a {
-        width: 100%;
+    thead th,
+    tbody td {
+        padding: 10px 12px;
+        font-size: 12.5px;
     }
 
     .mobile-nav {
@@ -538,7 +601,7 @@ textarea.form-control {
             Dashboard
         </a>
 
-        <a href="/assets" class="nav-item active">
+        <a href="/assets" class="nav-item">
             <svg viewBox="0 0 24 24">
                 <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
                 <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
@@ -568,7 +631,7 @@ textarea.form-control {
 
         <div class="nav-label">Transaksi</div>
 
-        <a href="{{ route('transactions.history') }}" class="nav-item">
+        <a href="{{ route('transactions.history') }}" class="nav-item active">
             <svg viewBox="0 0 24 24">
                 <path d="M3 3v5h5"/>
                 <path d="M3.05 13A9 9 0 1020 8.5"/>
@@ -628,8 +691,8 @@ textarea.form-control {
     <div class="main">
         <div class="topbar">
             <div class="topbar-left">
-                <h1>Transaksi Barang</h1>
-                <p>Input transaksi barang masuk atau keluar</p>
+                <h1>Detail Sesi Scan</h1>
+                <p>Informasi sesi scan dan detail transaksi barang</p>
             </div>
 
             <div class="profile-dropdown">
@@ -659,111 +722,149 @@ textarea.form-control {
         </div>
 
         <div class="content">
-            <div class="form-container">
-                <div class="page-head">
-                    <h1 class="page-title">Transaksi Barang</h1>
-                    <p class="page-subtitle">Input transaksi barang masuk atau keluar berdasarkan data barang.</p>
+            <div class="page-head">
+                <div>
+                    <h1 class="page-title">Detail Sesi Scan</h1>
+                    <p class="page-subtitle">Informasi batch scan, rekap hasil scan, dan detail transaksi.</p>
                 </div>
 
-                @if(session('error'))
-                    <div class="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <div class="card">
-                    <div class="card-header">
-                        <span>Informasi Barang</span>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="info-label">Kode Barang</span>
-                                <div class="info-value">{{ $asset->code }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Nama Barang</span>
-                                <div class="info-value">{{ $asset->name }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Buyer</span>
-                                <div class="info-value">{{ $asset->merk ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Style</span>
-                                <div class="info-value">{{ $asset->warna ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Grade</span>
-                                <div class="info-value">{{ $asset->ukuran ?? '-' }}</div>
-                            </div>
-
-                            <div class="info-item">
-                                <span class="info-label">Stok Saat Ini</span>
-                                <div class="info-value">{{ $asset->stok_saat_ini ?? 0 }} {{ $asset->satuan ?? 'pcs' }}</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="action-row">
+                    <a href="{{ route('transactions.history') }}" class="btn btn-light">Kembali ke Riwayat</a>
+                    <a href="{{ route('scan-batches.export', $batch->id) }}" class="btn btn-green">Export Sesi Ini</a>
+                    <a href="{{ route('scan-batches.printQr', $batch->id) }}" class="btn btn-primary">Cetak QR Sesi Ini</a>
                 </div>
-
-                <form method="POST" action="{{ route('transactions.store', $asset->code) }}" class="card">
-                    @csrf
-
-                    <div class="card-header">
-                        <span>Form Transaksi</span>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">Jenis Transaksi</label>
-                            <select name="type" required class="form-control">
-                                <option value="">— Pilih Transaksi —</option>
-                                <option value="IN" {{ old('type') == 'IN' ? 'selected' : '' }}>Barang Masuk / IN</option>
-                                <option value="OUT" {{ old('type') == 'OUT' ? 'selected' : '' }}>Barang Keluar / OUT</option>
-                            </select>
-
-                            @error('type')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Jumlah</label>
-                            <input type="number" name="quantity" value="{{ old('quantity', 1) }}" min="1" required class="form-control">
-
-                            @error('quantity')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Keterangan</label>
-                            <textarea name="note" rows="3" placeholder="Opsional" class="form-control">{{ old('note') }}</textarea>
-
-                            @error('note')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="action-row">
-                            <a href="{{ route('assets.show', $asset->code) }}" class="btn btn-light">Batal</a>
-                            <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
-                        </div>
-                    </div>
-                </form>
             </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Kode Batch</span>
+                            <div class="info-value">{{ $batch->batch_code }}</div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Tanggal Scan</span>
+                            <div class="info-value">{{ $batch->scan_date ? $batch->scan_date->format('d/m/Y H:i') : '-' }}</div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">Jenis Transaksi</span>
+                            <div class="info-value">
+                                <span class="badge {{ $batch->type === 'IN' ? 'type-in' : ($batch->type === 'OUT' ? 'type-out' : 'type-mixed') }}">
+                                    {{ $batch->type }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="info-label">User</span>
+                            <div class="info-value">{{ $batch->user->name ?? '-' }}</div>
+                        </div>
+
+                        <div class="info-item info-span-2">
+                            <span class="info-label">Keterangan</span>
+                            <div class="info-value">{{ $batch->note ?? '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Rekap Hasil Scan Sesi Ini</h2>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kode Barang</th>
+                                <th>Nama Barang</th>
+                                <th>Buyer</th>
+                                <th>Style</th>
+                                <th>Grade</th>
+                                <th>Total Scan</th>
+                                <th>Stok Saat Ini</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse ($recaps as $recap)
+                                <tr>
+                                    <td>
+                                        <span class="asset-code">{{ $recap['asset_code'] }}</span>
+                                    </td>
+                                    <td style="font-weight:500">{{ $recap['name'] }}</td>
+                                    <td>{{ $recap['merk'] }}</td>
+                                    <td>{{ $recap['warna'] }}</td>
+                                    <td>
+                                        <span class="badge grade-badge">{{ $recap['ukuran'] }}</span>
+                                    </td>
+                                    <td style="font-weight:600">{{ $recap['total_quantity'] }} {{ $recap['satuan'] }}</td>
+                                    <td>
+                                        <span class="badge stock-badge">
+                                            {{ $recap['stok_saat_ini'] }} {{ $recap['satuan'] }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="empty-row">Belum ada data transaksi pada sesi ini.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h2 class="section-title">Detail Transaksi</h2>
+
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Kode</th>
+                                <th>Nama Barang</th>
+                                <th>Jenis</th>
+                                <th>Jumlah</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @forelse ($batch->transactions as $transaction)
+                                <tr>
+                                    <td>{{ $transaction->transaction_date ? $transaction->transaction_date->format('d/m/Y H:i') : '-' }}</td>
+                                    <td>
+                                        <span class="asset-code">{{ $transaction->asset_code }}</span>
+                                    </td>
+                                    <td>{{ $transaction->asset->name ?? '-' }}</td>
+                                    <td>
+                                        <span class="badge {{ $transaction->type === 'IN' ? 'type-in' : 'type-out' }}">
+                                            {{ $transaction->type }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $transaction->quantity }}</td>
+                                    <td>{{ $transaction->note ?? '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="empty-row">Belum ada transaksi.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
 
 <div class="mobile-nav">
     <a href="/dashboard">Dashboard</a>
-    <a href="/assets" class="active">Aset</a>
+    <a href="/assets">Aset</a>
     <a href="/scan">Scan</a>
     <a href="{{ route('transactions.report') }}">Report</a>
 </div>
